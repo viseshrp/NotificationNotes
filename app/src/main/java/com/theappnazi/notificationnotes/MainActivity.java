@@ -1,15 +1,20 @@
 package com.theappnazi.notificationnotes;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.theappnazi.notificationnotes.datasources.NoteDataSource;
+import com.theappnazi.notificationnotes.utils.MessageUtils;
 
 public class MainActivity extends AppCompatActivity {
+
+    private NoteDataSource noteDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +23,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        noteDataSource = new NoteDataSource(this);
+        noteDataSource.open();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showAddNoteDialog(noteDataSource);
             }
         });
     }
@@ -48,5 +55,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showAddNoteDialog(NoteDataSource noteDataSource) {
+        MessageUtils.showAddNoteDialog(this, noteDataSource, new MessageUtils.AlertDialogCallback() {
+
+            @Override
+            public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
+
+                if (dialogInterface != null)
+                    dialogInterface.dismiss();
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        noteDataSource.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        noteDataSource.open();
+        super.onResume();
     }
 }

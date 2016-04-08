@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Notification Notes</string>
     <string name="action_settings">Settings</string>
+
+    <!--Add note dialog strings-->
+    <string name="add_note_dialog_title">Add a Note</string>
+    <string name="notification_title_hint">Add notification title here</string>
+    <string name="notification_content_hint">Add notification content here</string>
+    <string name="add_button">ADD</string>
+    <string name="persistent_setting">Persistent</string>
+
+    <!--Validation strings-->
+    <string name="data_invalid_toast">Please make sure you\'ve entered the title</string>
 </resources>

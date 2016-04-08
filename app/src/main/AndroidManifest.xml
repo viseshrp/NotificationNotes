@@ -18,6 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".receivers.NotificationCancelReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.theappnazi.notificationnotes.intent.NOTE_MARKED_READ" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
