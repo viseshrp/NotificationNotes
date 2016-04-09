@@ -45,7 +45,7 @@ public class NotificationUtils {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setOngoing(isPersistent)
-                .addAction(R.drawable.check_dark, "Done", getReadPendingIntent(context, notificationId));
+                .addAction(R.drawable.checkmark_24, "Done", getReadPendingIntent(context, notificationId));
 
         if (playSound) {
             builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
