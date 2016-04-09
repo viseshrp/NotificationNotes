@@ -26,7 +26,7 @@ public class NotificationUtils {
         intent.setAction(Intent.ACTION_MAIN);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, getRequestCode(),
-                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         showNotification(context, pendingIntent, title, content, notificationId, true, isPersistent);
     }
@@ -67,6 +67,6 @@ public class NotificationUtils {
     private static PendingIntent getReadPendingIntent(Context context, int notificationId) {
         Intent intent = new Intent("com.theappnazi.notificationnotes.intent.NOTE_MARKED_READ");
         intent.putExtra(AppConstants.NOTIFICATION_ID, notificationId);
-        return PendingIntent.getBroadcast(context, getRequestCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(context, getRequestCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
