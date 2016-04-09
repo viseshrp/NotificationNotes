@@ -3,6 +3,7 @@ package com.theappnazi.notificationnotes.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -43,7 +44,6 @@ public class MessageUtils {
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
 
-
             Button button = (Button) dialog.findViewById(R.id.add_button);
 
             button.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,6 @@ public class MessageUtils {
                     String noteDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
-
                         NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
                         noteDataSource.createNote(notificationTitle, notificationContent, noteDate);
                     }

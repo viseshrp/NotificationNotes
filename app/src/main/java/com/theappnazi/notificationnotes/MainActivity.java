@@ -58,14 +58,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showAddNoteDialog(NoteDataSource noteDataSource) {
-        MessageUtils.showAddNoteDialog(this, noteDataSource, new MessageUtils.AlertDialogCallback() {
+        MessageUtils.showAddNoteDialog(MainActivity.this, noteDataSource, new MessageUtils.AlertDialogCallback() {
 
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
-
                 if (dialogInterface != null)
                     dialogInterface.dismiss();
-
             }
         });
     }

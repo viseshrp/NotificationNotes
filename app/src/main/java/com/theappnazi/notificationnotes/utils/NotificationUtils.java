@@ -28,9 +28,7 @@ public class NotificationUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, getRequestCode(),
                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-
         showNotification(context, pendingIntent, title, content, notificationId, true, isPersistent);
-
     }
 
     private static void showNotification(Context context, PendingIntent pendingIntent, String title,
@@ -39,6 +37,7 @@ public class NotificationUtils {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.navigation_accept_dark)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(false)
                 .setContentTitle(title)
@@ -69,6 +68,5 @@ public class NotificationUtils {
         Intent intent = new Intent("com.theappnazi.notificationnotes.intent.NOTE_MARKED_READ");
         intent.putExtra(AppConstants.NOTIFICATION_ID, notificationId);
         return PendingIntent.getBroadcast(context, getRequestCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        //TODO: CHECK IF FLAG_CANCEL_CURRENT DOESNT CANCEL ANY OTHER NOTIFICATIONS
     }
 }
