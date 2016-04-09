@@ -38,12 +38,14 @@ public class NotificationUtils {
 
         builder.setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.navigation_accept_dark)
+                //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.navigation_accept_dark))
                 .setWhen(System.currentTimeMillis())
+                .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setAutoCancel(false)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setOngoing(isPersistent)
-                .addAction(R.drawable.navigation_accept_dark, "READ", getReadPendingIntent(context, notificationId));
+                .addAction(R.drawable.check_dark, "Done", getReadPendingIntent(context, notificationId));
 
         if (playSound) {
             builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

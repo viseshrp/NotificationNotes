@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
-                if (dialogInterface != null)
-                    dialogInterface.dismiss();
+                //refresh the note list display here.
             }
         });
     }

@@ -61,6 +61,7 @@ public class MessageUtils {
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
                         NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
                         noteDataSource.createNote(notificationTitle, notificationContent, noteDate);
+                        dialog.dismiss();
                     }
 
                     alertDialogCallback.onButtonClick(dialog, 0, AppConstants.ADD_BUTTON_CLICKED);
