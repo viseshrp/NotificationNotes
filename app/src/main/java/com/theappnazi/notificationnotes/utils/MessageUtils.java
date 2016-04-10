@@ -3,7 +3,6 @@ package com.theappnazi.notificationnotes.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -41,7 +40,7 @@ public class MessageUtils {
             dialog.setTitle(R.string.add_note_dialog_title);
             dialog.setContentView(R.layout.layout_add_note_dialog);
             dialog.setCancelable(true);
-            dialog.setCanceledOnTouchOutside(true);
+            dialog.setCanceledOnTouchOutside(false);
             dialog.show();
 
             Button button = (Button) dialog.findViewById(R.id.add_button);
