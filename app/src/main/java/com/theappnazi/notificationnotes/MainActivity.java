@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.theappnazi.notificationnotes.datasources.NoteDataSource;
@@ -25,24 +26,22 @@ public class MainActivity extends AppCompatActivity {
     private NoteDataSource noteDataSource;
 
     private LinearLayout linearLayout;
-    private Toolbar toolbar;
-    private Toolbar noNotesToolbar;
+
+    private RelativeLayout noNotesLayout;
+    private RelativeLayout mainContentLayout;
 
     private List<Note> noteList;
-
-    private boolean isPersistent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        noNotesToolbar = (Toolbar) findViewById(R.id.toolbar_no_notes);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         linearLayout = (LinearLayout) findViewById(R.id.card_layout);
-
-        isPersistent = false;
+        noNotesLayout = (RelativeLayout) findViewById(R.id.no_notes_layout);
+        mainContentLayout = (RelativeLayout) findViewById(R.id.content_main_layout);
 
         noteDataSource = new NoteDataSource(this);
         noteDataSource.open();
@@ -64,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViews() {
         if (!noteList.isEmpty()) {
+            mainContentLayout.setVisibility(View.VISIBLE);
+            noNotesLayout.setVisibility(View.GONE);
             for (int i = 0; i < noteList.size(); i++) {
                 ViewStub viewStub = new ViewStub(this);
                 linearLayout.addView(viewStub);
@@ -97,12 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            setContentView(R.layout.no_notes);
-
-            if (noNotesToolbar != null) {
-                setSupportActionBar(noNotesToolbar);
-                noNotesToolbar.setTitle(R.string.app_name);
-            }
+            noNotesLayout.setVisibility(View.VISIBLE);
+            mainContentLayout.setVisibility(View.GONE);
         }
     }
 
