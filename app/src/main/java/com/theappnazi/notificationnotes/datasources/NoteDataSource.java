@@ -19,7 +19,7 @@ public class NoteDataSource {
     private SQLiteDatabase database;
     private NoteHelper noteHelper;
     private String[] allColumns = {NoteHelper.ID, NoteHelper.NOTIFICATION_TITLE,
-            NoteHelper.NOTIFICATION_CONTENT, NoteHelper.NOTE_DATE};
+            NoteHelper.NOTIFICATION_CONTENT, NoteHelper.NOTE_DATE, NoteHelper.IS_PERSISTENT};
 
     public NoteDataSource(Context context) {
         noteHelper = new NoteHelper(context);
@@ -33,11 +33,12 @@ public class NoteDataSource {
         noteHelper.close();
     }
 
-    public Note createNote(String notification_title, String notification_content, String note_date) {
+    public Note createNote(String notification_title, String notification_content, String note_date, String is_persistent) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(NoteHelper.NOTIFICATION_TITLE, notification_title);
         contentValues.put(NoteHelper.NOTIFICATION_CONTENT, notification_content);
         contentValues.put(NoteHelper.NOTE_DATE, note_date);
+        contentValues.put(NoteHelper.IS_PERSISTENT, is_persistent);
 
         long insertId = database.insert(NoteHelper.TABLE_NAME, null, contentValues);
 
@@ -73,6 +74,7 @@ public class NoteDataSource {
         note.setNotification_title(cursor.getString(cursor.getColumnIndexOrThrow(NoteHelper.NOTIFICATION_TITLE)));
         note.setNotification_content(cursor.getString(cursor.getColumnIndexOrThrow(NoteHelper.NOTIFICATION_CONTENT)));
         note.setNote_date(cursor.getString(cursor.getColumnIndexOrThrow(NoteHelper.NOTE_DATE)));
+        note.setPersistent(Boolean.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(String.valueOf(NoteHelper.IS_PERSISTENT)))));
 
         return note;
     }

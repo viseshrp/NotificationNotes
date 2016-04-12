@@ -59,16 +59,52 @@ public class MessageUtils {
 
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
                         NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
-                        noteDataSource.createNote(notificationTitle, notificationContent, noteDate);
+                        noteDataSource.createNote(notificationTitle, notificationContent, noteDate, String.valueOf(persistentCheckBox.isChecked()));
                         dialog.dismiss();
                     }
 
                     alertDialogCallback.onButtonClick(dialog, 0, AppConstants.ADD_BUTTON_CLICKED);
                 }
             });
-
-
         }
     }
+
+    public static void showNotifyDialog(final Context context, final String notificationTitle, final String notificationContent, final boolean isPersistent, final NoteDataSource noteDataSource, final AlertDialogCallback alertDialogCallback) {
+        if (context != null && context.getResources() != null) {
+            final Dialog dialog = new Dialog(context);
+            dialog.setTitle(R.string.add_note_dialog_title);
+            dialog.setContentView(R.layout.layout_notify_note_dialog);
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+            EditText noteTitle = (EditText) dialog.findViewById(R.id.notification_title_edittext);
+            EditText noteContent = (EditText) dialog.findViewById(R.id.notification_content_edittext);
+            final CheckBox persistentCheckBox = (CheckBox) dialog.findViewById(R.id.checkbox_persistent);
+
+            noteTitle.setText(notificationTitle);
+            noteContent.setText(notificationContent);
+            persistentCheckBox.setChecked(isPersistent);
+
+            Button button = (Button) dialog.findViewById(R.id.add_button);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String noteDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+                    if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
+                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
+                        noteDataSource.createNote(notificationTitle, notificationContent, noteDate, String.valueOf(persistentCheckBox.isChecked()));
+                        dialog.dismiss();
+                    }
+
+                    alertDialogCallback.onButtonClick(dialog, 0, AppConstants.ADD_BUTTON_CLICKED);
+                }
+            });
+        }
+    }
+
 
 }

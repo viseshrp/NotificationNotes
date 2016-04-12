@@ -8,6 +8,7 @@ public class Note {
     private String notification_title;
     private String notification_content;
     private String note_date;
+    private boolean isPersistent;
 
     public int getId() {
         return id;
@@ -39,5 +40,13 @@ public class Note {
 
     public void setNote_date(String note_date) {
         this.note_date = note_date;
+    }
+
+    public boolean isPersistent() {
+        return isPersistent;
+    }
+
+    public void setPersistent(boolean persistent) {
+        isPersistent = persistent;
     }
 }

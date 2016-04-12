@@ -12,17 +12,19 @@ public class NoteHelper extends SQLiteOpenHelper {
     //Database Related Constants
     private static final String DATABASE_NAME = "noteshistory";
     public static final String TABLE_NAME = "notes";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //Database Columns
     public static final String ID = "_id";
     public static final String NOTIFICATION_TITLE = "notification_title";
     public static final String NOTIFICATION_CONTENT = "notification_content";
     public static final String NOTE_DATE = "note_date";
+    public static final String IS_PERSISTENT = "is_persistent";
 
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + " (" + ID
             + " integer primary key autoincrement, " + NOTIFICATION_TITLE + " text, "
-            + NOTIFICATION_CONTENT + " text, " + NOTE_DATE + " text);";
+            + NOTIFICATION_CONTENT + " text, " + NOTE_DATE + " text, " + IS_PERSISTENT + " text);";
+
     private static final String DROP_TABLE = "drop table if exists " + TABLE_NAME;
 
     public NoteHelper(Context context) {
