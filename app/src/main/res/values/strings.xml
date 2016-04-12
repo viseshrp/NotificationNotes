@@ -8,6 +8,8 @@
     <string name="label_note_date">NOTE DATE</string>
     <string name="label_note_title">NOTE TITLE</string>
     <string name="label_note_content">NOTE CONTENT</string>
+    <string name="note_added_snackbar">"Note added!"</string>
+    <string name="note_notified_snackbar">"You've been notified!"</string>
 
     <!--Add note dialog strings-->
     <string name="add_note_dialog_title">Add a Note</string>

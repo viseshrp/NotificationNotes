@@ -2,7 +2,9 @@ package com.theappnazi.notificationnotes;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout noNotesLayout;
     private RelativeLayout mainContentLayout;
+    private CoordinatorLayout mainActivityLayout;
 
     private List<Note> noteList;
 
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayout = (LinearLayout) findViewById(R.id.card_layout);
         noNotesLayout = (RelativeLayout) findViewById(R.id.no_notes_layout);
         mainContentLayout = (RelativeLayout) findViewById(R.id.content_main_layout);
+        mainActivityLayout = (CoordinatorLayout) findViewById(R.id.activity_main_layout);
 
         noteDataSource = new NoteDataSource(this);
         noteDataSource.open();
@@ -131,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                 //refresh layout
+                Snackbar.make(mainActivityLayout, "Note added!", Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -143,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                         //refresh the note list display here.
+                        Snackbar.make(mainActivityLayout, "You've been notified!", Snackbar.LENGTH_LONG).show();
                     }
                 });
     }
