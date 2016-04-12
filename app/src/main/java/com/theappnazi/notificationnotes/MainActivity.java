@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        noNotesToolbar = (Toolbar) findViewById(R.id.toolbar);
+        noNotesToolbar = (Toolbar) findViewById(R.id.toolbar_no_notes);
         setSupportActionBar(toolbar);
 
         linearLayout = (LinearLayout) findViewById(R.id.card_layout);
@@ -88,14 +88,20 @@ public class MainActivity extends AppCompatActivity {
 
                 noteDateView.setText(String.valueOf(noteList.get(i).getNote_date()));
                 noteTitleView.setText(noteList.get(i).getNotification_title());
-                noteContentView.setText(noteList.get(i).getNotification_content());
+
+                String noteContent = noteList.get(i).getNotification_content();
+                if (noteContent != null && !noteContent.equals("")) {
+                    noteContentView.setText(noteContent);
+                } else {
+                    linearLayout4.setVisibility(View.GONE);
+                }
             }
         } else {
             setContentView(R.layout.no_notes);
 
-            if (toolbar != null) {
-                setSupportActionBar(toolbar);
-                toolbar.setTitle(R.string.app_name);
+            if (noNotesToolbar != null) {
+                setSupportActionBar(noNotesToolbar);
+                noNotesToolbar.setTitle(R.string.app_name);
             }
         }
     }
@@ -127,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
-                //refresh the note list display here.
+                //refresh layout
             }
         });
     }
