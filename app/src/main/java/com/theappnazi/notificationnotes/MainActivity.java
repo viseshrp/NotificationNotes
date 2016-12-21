@@ -17,15 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.theappnazi.notificationnotes.datasources.NoteDataSource;
 import com.theappnazi.notificationnotes.models.Note;
 import com.theappnazi.notificationnotes.utils.MessageUtils;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private NoteDataSource noteDataSource;
 
     private LinearLayout linearLayout;
 
@@ -47,10 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mainContentLayout = (RelativeLayout) findViewById(R.id.content_main_layout);
         mainActivityLayout = (CoordinatorLayout) findViewById(R.id.activity_main_layout);
 
-        noteDataSource = new NoteDataSource(this);
-        noteDataSource.open();
-
-        noteList = noteDataSource.getAllNotes();
+        noteList = Note.listAll(Note.class);
 
         setupViews();
 
@@ -59,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showAddNoteDialog(noteDataSource);
+                    showAddNoteDialog();
                 }
             });
         }
@@ -129,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showAddNoteDialog(NoteDataSource noteDataSource) {
-        MessageUtils.showAddNoteDialog(MainActivity.this, noteDataSource, new MessageUtils.AlertDialogCallback() {
+    public void showAddNoteDialog() {
+        MessageUtils.showAddNoteDialog(MainActivity.this, new MessageUtils.AlertDialogCallback() {
 
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
@@ -143,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     public void onNotifyPressed(View view) {
         int viewId = view.getId();
         MessageUtils.showNotifyDialog(MainActivity.this, noteList.get(viewId).getNotification_title(),
-                noteList.get(viewId).getNotification_content(), noteList.get(viewId).isPersistent(), noteDataSource,
+                noteList.get(viewId).getNotification_content(), noteList.get(viewId).isPersistent(),
                 new MessageUtils.AlertDialogCallback() {
                     @Override
                     public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
@@ -155,13 +149,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        noteDataSource.close();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        noteDataSource.open();
         super.onResume();
     }
 

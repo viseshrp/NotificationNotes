@@ -1,21 +1,25 @@
 package com.theappnazi.notificationnotes.models;
 
+import com.orm.SugarRecord;
+
 /**
  * Created by vises_000 on 4/6/2016.
  */
-public class Note {
-    private int id;
+public class Note extends SugarRecord {
     private String notification_title;
     private String notification_content;
     private String note_date;
     private boolean isPersistent;
 
-    public int getId() {
-        return id;
+    public Note() {
+
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Note(String notification_title, String notification_content, String note_date, boolean isPersistent) {
+        this.notification_title = notification_title;
+        this.notification_content = notification_content;
+        this.note_date = note_date;
+        this.isPersistent = isPersistent;
     }
 
     public String getNotification_title() {

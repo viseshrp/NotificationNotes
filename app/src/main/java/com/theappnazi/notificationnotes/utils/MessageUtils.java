@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.theappnazi.notificationnotes.MainActivity;
 import com.theappnazi.notificationnotes.R;
-import com.theappnazi.notificationnotes.datasources.NoteDataSource;
+import com.theappnazi.notificationnotes.models.Note;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +34,7 @@ public class MessageUtils {
         void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType);
     }
 
-    public static void showAddNoteDialog(final Context context, final NoteDataSource noteDataSource, final AlertDialogCallback alertDialogCallback) {
+    public static void showAddNoteDialog(final Context context, final AlertDialogCallback alertDialogCallback) {
         if (context != null && context.getResources() != null) {
             final Dialog dialog = new Dialog(context);
             dialog.setTitle(R.string.add_note_dialog_title);
@@ -59,7 +59,8 @@ public class MessageUtils {
 
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
                         NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
-                        noteDataSource.createNote(notificationTitle, notificationContent, noteDate, String.valueOf(persistentCheckBox.isChecked()));
+                        Note note = new Note(notificationTitle, notificationContent, noteDate, persistentCheckBox.isChecked());
+                        note.save();
                         dialog.dismiss();
                     }
 
@@ -69,7 +70,7 @@ public class MessageUtils {
         }
     }
 
-    public static void showNotifyDialog(final Context context, final String notificationTitle, final String notificationContent, final boolean isPersistent, final NoteDataSource noteDataSource, final AlertDialogCallback alertDialogCallback) {
+    public static void showNotifyDialog(final Context context, final String notificationTitle, final String notificationContent, final boolean isPersistent, final AlertDialogCallback alertDialogCallback) {
         if (context != null && context.getResources() != null) {
             final Dialog dialog = new Dialog(context);
             dialog.setTitle(R.string.add_note_dialog_title);
@@ -96,7 +97,8 @@ public class MessageUtils {
 
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
                         NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
-                        noteDataSource.createNote(notificationTitle, notificationContent, noteDate, String.valueOf(persistentCheckBox.isChecked()));
+                        Note note = new Note(notificationTitle, notificationContent, noteDate, persistentCheckBox.isChecked());
+                        note.save();
                         dialog.dismiss();
                     }
 
