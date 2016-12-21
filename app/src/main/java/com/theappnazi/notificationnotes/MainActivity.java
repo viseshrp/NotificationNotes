@@ -1,6 +1,10 @@
 package com.theappnazi.notificationnotes;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout noNotesLayout;
     private RelativeLayout mainContentLayout;
     private CoordinatorLayout mainActivityLayout;
+    private View mProgressView;
 
     private List<Note> noteList;
 
@@ -39,12 +44,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mProgressView = findViewById(R.id.content_progress);
         linearLayout = (LinearLayout) findViewById(R.id.card_layout);
         noNotesLayout = (RelativeLayout) findViewById(R.id.no_notes_layout);
         mainContentLayout = (RelativeLayout) findViewById(R.id.content_main_layout);
         mainActivityLayout = (CoordinatorLayout) findViewById(R.id.activity_main_layout);
-
-        noteList = Note.listAll(Note.class);
 
         setupViews();
 
@@ -60,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
+
+        showProgress(true);
+
+        noteList = Note.listAll(Note.class);
+
         if (!noteList.isEmpty()) {
             mainContentLayout.setVisibility(View.VISIBLE);
             noNotesLayout.setVisibility(View.GONE);
@@ -95,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
                     linearLayout4.setVisibility(View.GONE);
                 }
             }
+            showProgress(false);
         } else {
+            showProgress(false);
             noNotesLayout.setVisibility(View.VISIBLE);
             mainContentLayout.setVisibility(View.GONE);
         }
@@ -106,6 +117,39 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mainContentLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
