@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes.utils;
+package com.theappnazi.notenotifier.utils;
 
 /**
  * Created by vises_000 on 4/3/2016.

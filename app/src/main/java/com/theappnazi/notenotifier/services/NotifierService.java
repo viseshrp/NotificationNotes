@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes.services;
+package com.theappnazi.notenotifier.services;
 
 import android.app.Service;
 import android.content.Intent;

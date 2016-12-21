@@ -1,11 +1,11 @@
-package com.theappnazi.notificationnotes.receivers;
+package com.theappnazi.notenotifier.receivers;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.theappnazi.notificationnotes.utils.AppConstants;
+import com.theappnazi.notenotifier.utils.AppConstants;
 
 public class NotificationCancelReceiver extends BroadcastReceiver {
     public NotificationCancelReceiver() {

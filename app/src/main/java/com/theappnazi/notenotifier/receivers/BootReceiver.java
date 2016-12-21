@@ -1,11 +1,10 @@
-package com.theappnazi.notificationnotes.receivers;
+package com.theappnazi.notenotifier.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.theappnazi.notificationnotes.MainActivity;
-import com.theappnazi.notificationnotes.services.NotifierService;
+import com.theappnazi.notenotifier.services.NotifierService;
 
 public class BootReceiver extends BroadcastReceiver {
     public BootReceiver() {

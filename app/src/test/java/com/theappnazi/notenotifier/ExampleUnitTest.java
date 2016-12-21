@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes;
+package com.theappnazi.notenotifier;
 
 import org.junit.Test;
 

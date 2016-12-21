@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes;
+package com.theappnazi.notenotifier;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,8 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.theappnazi.notificationnotes.models.Note;
-import com.theappnazi.notificationnotes.utils.MessageUtils;
+import com.theappnazi.notenotifier.models.Note;
+import com.theappnazi.notenotifier.utils.MessageUtils;
 
 import java.util.List;
 

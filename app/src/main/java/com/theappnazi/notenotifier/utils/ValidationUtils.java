@@ -1,8 +1,8 @@
-package com.theappnazi.notificationnotes.utils;
+package com.theappnazi.notenotifier.utils;
 
 import android.content.Context;
 
-import com.theappnazi.notificationnotes.R;
+import com.theappnazi.notenotifier.R;
 
 /**
  * Created by vises_000 on 4/7/2016.

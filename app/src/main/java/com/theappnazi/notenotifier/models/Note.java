@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes.models;
+package com.theappnazi.notenotifier.models;
 
 import com.orm.SugarRecord;
 

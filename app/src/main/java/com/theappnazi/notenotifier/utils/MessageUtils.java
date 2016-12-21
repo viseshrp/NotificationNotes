@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes.utils;
+package com.theappnazi.notenotifier.utils;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.theappnazi.notificationnotes.MainActivity;
-import com.theappnazi.notificationnotes.R;
-import com.theappnazi.notificationnotes.models.Note;
+import com.theappnazi.notenotifier.MainActivity;
+import com.theappnazi.notenotifier.R;
+import com.theappnazi.notenotifier.models.Note;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

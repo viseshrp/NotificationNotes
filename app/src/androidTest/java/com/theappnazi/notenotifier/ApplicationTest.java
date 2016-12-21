@@ -1,4 +1,4 @@
-package com.theappnazi.notificationnotes;
+package com.theappnazi.notenotifier;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
