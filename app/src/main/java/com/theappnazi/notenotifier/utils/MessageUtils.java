@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.theappnazi.notenotifier.MainActivity;
+import com.theappnazi.notenotifier.ui.MainActivity;
 import com.theappnazi.notenotifier.R;
 import com.theappnazi.notenotifier.models.Note;
 
