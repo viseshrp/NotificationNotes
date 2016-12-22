@@ -32,7 +32,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.theappnazi.notificationnotes.intent.NOTE_MARKED_READ" />
+                <action android:name="com.theappnazi.notenotifier.intent.NOTE_MARKED_READ" />
             </intent-filter>
         </receiver>
         <receiver
