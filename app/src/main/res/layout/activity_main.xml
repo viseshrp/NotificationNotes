@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.theappnazi.notenotifier.MainActivity">
+    tools:context="com.theappnazi.notenotifier.ui.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!-- Login progress -->
     <ProgressBar
         android:id="@+id/content_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -33,12 +32,18 @@
         android:visibility="gone" />
 
     <include
-        android:id="@+id/content_main_layout"
-        layout="@layout/content_main" />
-
-    <include
         android:id="@+id/no_notes_layout"
         layout="@layout/no_notes" />
+
+    <com.theappnazi.notenotifier.views.MyRecyclerView
+        android:id="@+id/note_item_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scrollbars="vertical"
+        android:visibility="visible" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -46,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:paddingBottom="20dp"
         android:src="@drawable/ic_plus_white_48dp" />
 
 </android.support.design.widget.CoordinatorLayout>

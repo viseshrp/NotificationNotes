@@ -1,4 +1,4 @@
-package com.theappnazi.notenotifier;
+package com.theappnazi.notenotifier.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -11,6 +11,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,34 +23,48 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.theappnazi.notenotifier.R;
+import com.theappnazi.notenotifier.adapters.NoteItemsAdapter;
 import com.theappnazi.notenotifier.models.Note;
 import com.theappnazi.notenotifier.utils.MessageUtils;
+import com.theappnazi.notenotifier.views.MyRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LinearLayout linearLayout;
 
-    private RelativeLayout noNotesLayout;
-    private RelativeLayout mainContentLayout;
-    private CoordinatorLayout mainActivityLayout;
-    private View mProgressView;
+    @BindView(R.id.note_item_list)
+    MyRecyclerView mNoteItemList;
+
+    @BindView(R.id.no_notes_layout)
+    RelativeLayout noNotesLayout;
+
+    @BindView(R.id.activity_main_layout)
+    CoordinatorLayout mainActivityLayout;
+
+    @BindView(R.id.content_progress)
+    View mProgressView;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private List<Note> noteList;
+
+    private NoteItemsAdapter noteItemsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        mProgressView = findViewById(R.id.content_progress);
-        linearLayout = (LinearLayout) findViewById(R.id.card_layout);
-        noNotesLayout = (RelativeLayout) findViewById(R.id.no_notes_layout);
-        mainContentLayout = (RelativeLayout) findViewById(R.id.content_main_layout);
-        mainActivityLayout = (CoordinatorLayout) findViewById(R.id.activity_main_layout);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
 
         setupViews();
 
@@ -70,46 +86,33 @@ public class MainActivity extends AppCompatActivity {
         noteList = Note.listAll(Note.class);
 
         if (!noteList.isEmpty()) {
-            mainContentLayout.setVisibility(View.VISIBLE);
+            mNoteItemList.setVisibility(View.VISIBLE);
             noNotesLayout.setVisibility(View.GONE);
-            for (int i = 0; i < noteList.size(); i++) {
-                ViewStub viewStub = new ViewStub(this);
-                linearLayout.addView(viewStub);
-                viewStub.setLayoutResource(R.layout.notes_history_card_layout);
-                viewStub.inflate();
 
-                CardView cardView = (CardView) linearLayout.getChildAt(i);
-                LinearLayout linearLayout1 = (LinearLayout) cardView.getChildAt(0);
-
-                LinearLayout linearLayout2 = (LinearLayout) linearLayout1.getChildAt(0);
-                TextView noteDateView = (TextView) linearLayout2.getChildAt(1);
-
-                LinearLayout linearLayout3 = (LinearLayout) linearLayout1.getChildAt(1);
-                TextView noteTitleView = (TextView) linearLayout3.getChildAt(1);
-
-                LinearLayout linearLayout4 = (LinearLayout) linearLayout1.getChildAt(2);
-                TextView noteContentView = (TextView) linearLayout4.getChildAt(1);
-
-                LinearLayout linearLayout5 = (LinearLayout) linearLayout1.getChildAt(3);
-                Button button = (Button) linearLayout5.getChildAt(0);
-                button.setId(i);
-
-                noteDateView.setText(String.valueOf(noteList.get(i).getNote_date()));
-                noteTitleView.setText(noteList.get(i).getNotification_title());
-
-                String noteContent = noteList.get(i).getNotification_content();
-                if (noteContent != null && !noteContent.equals("")) {
-                    noteContentView.setText(noteContent);
-                } else {
-                    linearLayout4.setVisibility(View.GONE);
+            //recyclerview setup
+            mNoteItemList.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManger = new LinearLayoutManager(this);
+            mNoteItemList.setLayoutManager(mLayoutManger);
+            noteItemsAdapter = new NoteItemsAdapter(this, new NoteItemsAdapter.ItemTapListener() {
+                @Override
+                public void onTap(Note note) {
+                    showNotifyDialog(note);
                 }
-            }
+            });
+            mNoteItemList.setAdapter(noteItemsAdapter);
+            setDataset(noteList);
+
             showProgress(false);
         } else {
             showProgress(false);
             noNotesLayout.setVisibility(View.VISIBLE);
-            mainContentLayout.setVisibility(View.GONE);
+            mNoteItemList.setVisibility(View.GONE);
         }
+    }
+
+    private void setDataset(List<Note> noteList) {
+        noteItemsAdapter.setDataset(noteList);
+        noteItemsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -127,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
-            mainContentLayout.animate().setDuration(shortAnimTime).alpha(
+            mNoteItemList.setVisibility(show ? View.GONE : View.VISIBLE);
+            mNoteItemList.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mNoteItemList.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mainContentLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mNoteItemList.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -173,19 +176,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                 //refresh layout
+
+                mNoteItemList.invalidate();
+                //noteItemsAdapter.notifyDataSetChanged();
                 Snackbar.make(mainActivityLayout, "Note added!", Snackbar.LENGTH_LONG).show();
             }
         });
     }
 
-    public void onNotifyPressed(View view) {
-        int viewId = view.getId();
-        MessageUtils.showNotifyDialog(MainActivity.this, noteList.get(viewId).getNotification_title(),
-                noteList.get(viewId).getNotification_content(), noteList.get(viewId).isPersistent(),
+    public void showNotifyDialog(Note note) {
+        MessageUtils.showNotifyDialog(MainActivity.this, note.getNotification_title(),
+                note.getNotification_content(), note.isPersistent(),
                 new MessageUtils.AlertDialogCallback() {
                     @Override
                     public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                         //refresh the note list display here.
+
+                        mNoteItemList.invalidate();
+                        //noteItemsAdapter.notifyDataSetChanged();
                         Snackbar.make(mainActivityLayout, "You've been notified!", Snackbar.LENGTH_LONG).show();
                     }
                 });
