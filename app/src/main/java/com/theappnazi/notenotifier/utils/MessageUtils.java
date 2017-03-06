@@ -3,6 +3,7 @@ package com.theappnazi.notenotifier.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -86,14 +87,14 @@ public class MessageUtils {
     public static void showNotifyDialog(final Context context, final int notificationId, final String notificationTitle, final String notificationContent, final boolean isPersistent, final AlertDialogCallback alertDialogCallback) {
         if (context != null && context.getResources() != null) {
             final Dialog dialog = new Dialog(context);
-            dialog.setTitle(R.string.add_note_dialog_title);
+            dialog.setTitle(R.string.modify_note_dialog_title);
             dialog.setContentView(R.layout.layout_notify_note_dialog);
             dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
 
-            EditText noteTitle = (EditText) dialog.findViewById(R.id.notification_title_edittext);
-            EditText noteContent = (EditText) dialog.findViewById(R.id.notification_content_edittext);
+            final EditText noteTitle = (EditText) dialog.findViewById(R.id.notification_title_edittext);
+            final EditText noteContent = (EditText) dialog.findViewById(R.id.notification_content_edittext);
             final CheckBox persistentCheckBox = (CheckBox) dialog.findViewById(R.id.checkbox_persistent);
 
             noteTitle.setText(notificationTitle);
@@ -105,26 +106,25 @@ public class MessageUtils {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
+
+                        String notificationTitleNew = noteTitle.getText().toString();
+                        String notificationContentNew = noteContent.getText().toString();
 
                         //add to list
                         NotificationUtils.addToCurrentList(context, notificationId, false);
 
                         //updates existing notif
-                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationId, notificationTitle, notificationContent, isPersistent);
+                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationId, notificationTitleNew, notificationContentNew, persistentCheckBox.isChecked());
 
                         //find note object
                         Note note = Note.find(Note.class, "notification_Id = ?", String.valueOf(notificationId)).get(0);
 
-                        //dont do the db update until something has changed
-                        if (note != null && !note.getNotification_title().equals(notificationTitle) && !note.getNotification_content().equals(notificationContent)) {
-                            note.setNotification_title(notificationTitle);
-                            note.setNotification_content(notificationContent);
-                            note.setNote_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                            note.setPersistent(isPersistent);
-                            note.save();
-                        }
+                        note.setNotification_title(notificationTitleNew);
+                        note.setNotification_content(notificationContentNew);
+                        note.setNote_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                        note.setPersistent(persistentCheckBox.isChecked());
+                        note.save();
 
                         dialog.dismiss();
                     }

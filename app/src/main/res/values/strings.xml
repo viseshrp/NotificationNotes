@@ -13,6 +13,7 @@
 
     <!--Add note dialog strings-->
     <string name="add_note_dialog_title">Add a Note</string>
+    <string name="modify_note_dialog_title">Modify Note</string>
     <string name="notification_title_hint">Add notification title here</string>
     <string name="notification_content_hint">Add notification content here</string>
     <string name="add_button">ADD</string>
