@@ -9,12 +9,18 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.theappnazi.notenotifier.ui.MainActivity;
 import com.theappnazi.notenotifier.R;
 import com.theappnazi.notenotifier.models.Note;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by vises_000 on 4/3/2016.
@@ -58,8 +64,15 @@ public class MessageUtils {
                     String noteDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
-                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
-                        Note note = new Note(notificationTitle, notificationContent, noteDate, persistentCheckBox.isChecked());
+                        //pass notification id, then add to list
+                        int notificationId = NotificationUtils.getNotificationId();
+                        //notid randomly generated newly each time
+
+                        //add to list
+                        NotificationUtils.addToCurrentList(context, notificationId, true);
+
+                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationId, notificationTitle, notificationContent, persistentCheckBox.isChecked());
+                        Note note = new Note(notificationId, notificationTitle, notificationContent, noteDate, persistentCheckBox.isChecked());
                         note.save();
                         dialog.dismiss();
                     }
@@ -70,7 +83,7 @@ public class MessageUtils {
         }
     }
 
-    public static void showNotifyDialog(final Context context, final String notificationTitle, final String notificationContent, final boolean isPersistent, final AlertDialogCallback alertDialogCallback) {
+    public static void showNotifyDialog(final Context context, final int notificationId, final String notificationTitle, final String notificationContent, final boolean isPersistent, final AlertDialogCallback alertDialogCallback) {
         if (context != null && context.getResources() != null) {
             final Dialog dialog = new Dialog(context);
             dialog.setTitle(R.string.add_note_dialog_title);
@@ -93,12 +106,26 @@ public class MessageUtils {
                 @Override
                 public void onClick(View v) {
 
-                    String noteDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
                     if (ValidationUtils.checkValidity(notificationTitle, AppConstants.DATA_TYPE_GENERAL_TEXT, context)) {
-                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationTitle, notificationContent, persistentCheckBox.isChecked());
-                        Note note = new Note(notificationTitle, notificationContent, noteDate, persistentCheckBox.isChecked());
-                        note.save();
+
+                        //add to list
+                        NotificationUtils.addToCurrentList(context, notificationId, false);
+
+                        //updates existing notif
+                        NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationId, notificationTitle, notificationContent, isPersistent);
+
+                        //find note object
+                        Note note = Note.find(Note.class, "notification_Id = ?", String.valueOf(notificationId)).get(0);
+
+                        //dont do the db update until something has changed
+                        if (note != null && !note.getNotification_title().equals(notificationTitle) && !note.getNotification_content().equals(notificationContent)) {
+                            note.setNotification_title(notificationTitle);
+                            note.setNotification_content(notificationContent);
+                            note.setNote_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                            note.setPersistent(isPersistent);
+                            note.save();
+                        }
+
                         dialog.dismiss();
                     }
 

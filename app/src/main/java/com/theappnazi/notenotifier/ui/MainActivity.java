@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showNotifyDialog(Note note) {
-        MessageUtils.showNotifyDialog(MainActivity.this, note.getNotification_title(),
+        MessageUtils.showNotifyDialog(MainActivity.this, note.getNotificationId(), note.getNotification_title(),
                 note.getNotification_content(), note.isPersistent(),
                 new MessageUtils.AlertDialogCallback() {
                     @Override

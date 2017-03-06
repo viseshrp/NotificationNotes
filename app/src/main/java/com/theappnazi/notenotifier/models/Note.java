@@ -6,6 +6,7 @@ import com.orm.SugarRecord;
  * Created by vises_000 on 4/6/2016.
  */
 public class Note extends SugarRecord {
+    private int notificationId;
     private String notification_title;
     private String notification_content;
     private String note_date;
@@ -15,11 +16,20 @@ public class Note extends SugarRecord {
 
     }
 
-    public Note(String notification_title, String notification_content, String note_date, boolean isPersistent) {
+    public Note(int notificationId, String notification_title, String notification_content, String note_date, boolean isPersistent) {
+        this.notificationId = notificationId;
         this.notification_title = notification_title;
         this.notification_content = notification_content;
         this.note_date = note_date;
         this.isPersistent = isPersistent;
+    }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
     }
 
     public String getNotification_title() {

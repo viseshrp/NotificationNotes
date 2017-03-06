@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.theappnazi.notenotifier.utils.AppConstants;
+import com.theappnazi.notenotifier.utils.NotificationUtils;
 
 public class NotificationCancelReceiver extends BroadcastReceiver {
     public NotificationCancelReceiver() {
@@ -16,7 +17,9 @@ public class NotificationCancelReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         if (intent.hasExtra(AppConstants.NOTIFICATION_ID)) {
-            notificationManager.cancel(intent.getIntExtra(AppConstants.NOTIFICATION_ID, 0));
+            int notificationId = intent.getIntExtra(AppConstants.NOTIFICATION_ID, 0);
+            notificationManager.cancel(notificationId);
+            NotificationUtils.deleteFromCurrentList(context, notificationId);
         }
     }
 }

@@ -12,4 +12,6 @@ public class AppConstants {
     public static final int DATA_TYPE_GENERAL_TEXT = 2;
 
     public static final String NOTIFICATION_ID = "notification_id";
+
+    public static final String CURRENT_NOTIF_LIST = "current_notif_list";
 }
