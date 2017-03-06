@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.theappnazi.notenotifier.R;
+import com.theappnazi.notenotifier.models.Note;
+import com.theappnazi.notenotifier.ui.MainActivity;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -123,7 +126,6 @@ public class NotificationUtils {
         Type type = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         ArrayList<Integer> currentNotifList = null;
-        int index = 0;
 
         if (json != null && !json.equals("")) {
             //get arraylist from json
@@ -131,7 +133,7 @@ public class NotificationUtils {
         }
 
         if (currentNotifList != null) {
-            index = Collections.binarySearch(currentNotifList, notificationId);
+            int index = Collections.binarySearch(currentNotifList, notificationId);
 
             if (index >= 0) // is found in curr list
             {
@@ -142,6 +144,21 @@ public class NotificationUtils {
 
         json = gson.toJson(currentNotifList);
         PreferencesUtils.setString(context, AppConstants.CURRENT_NOTIF_LIST, json);
+
+    }
+
+    public static void setupNotifications(Context context) {
+        ArrayList<Integer> currentList = NotificationUtils.getCurrentList(context);
+        if (currentList != null) {
+            for (Integer notificationId : currentList) {
+                Note note = Note.find(Note.class, "notification_Id = ?", String.valueOf(notificationId)).get(0);
+                String notificationTitle = note.getNotification_title();
+                String notificationContent = note.getNotification_content();
+                boolean isPersistent = note.isPersistent();
+
+                NotificationUtils.showNewNoteNotification(context, MainActivity.class, notificationId, notificationTitle, notificationContent, isPersistent);
+            }
+        }
     }
 
 

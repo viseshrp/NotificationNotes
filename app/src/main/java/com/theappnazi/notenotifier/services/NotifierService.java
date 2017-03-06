@@ -11,8 +11,6 @@ import com.theappnazi.notenotifier.utils.NotificationUtils;
 
 import java.util.ArrayList;
 
-//// TODO: 12/20/16 this service should check from prefutils string
-// what note ids are currently in use and then notify those.
 public class NotifierService extends Service {
     public NotifierService() {
     }
@@ -24,21 +22,9 @@ public class NotifierService extends Service {
         return null;
     }
 
-    private void setupNotifications(){
-        ArrayList<Integer> currentList = NotificationUtils.getCurrentList(this);
-        for(Integer notificationId : currentList) {
-            Note note = Note.find(Note.class, "notification_Id = ?", String.valueOf(notificationId)).get(0);
-            String notificationTitle = note.getNotification_title();
-            String notificationContent = note.getNotification_content();
-            boolean isPersistent = note.isPersistent();
-
-            NotificationUtils.showNewNoteNotification(this, MainActivity.class, notificationId, notificationTitle, notificationContent, isPersistent);
-        }
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        setupNotifications();
+        NotificationUtils.setupNotifications(NotifierService.this);
         return START_STICKY;
     }
 

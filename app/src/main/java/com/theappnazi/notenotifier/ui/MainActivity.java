@@ -27,6 +27,7 @@ import com.theappnazi.notenotifier.R;
 import com.theappnazi.notenotifier.adapters.NoteItemsAdapter;
 import com.theappnazi.notenotifier.models.Note;
 import com.theappnazi.notenotifier.utils.MessageUtils;
+import com.theappnazi.notenotifier.utils.NotificationUtils;
 import com.theappnazi.notenotifier.views.MyRecyclerView;
 
 import java.util.ArrayList;
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setupViews();
+
+        NotificationUtils.setupNotifications(MainActivity.this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
