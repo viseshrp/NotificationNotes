@@ -203,7 +203,9 @@ public class MainActivity extends AppCompatActivity {
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                 //refresh layout
                 //mNoteItemList.invalidate();
-                noteItemsAdapter.notifyDataSetChanged();
+                if (noteItemsAdapter != null)
+                    noteItemsAdapter.notifyDataSetChanged();
+
                 Snackbar.make(mainActivityLayout, "Note added!", Snackbar.LENGTH_LONG).show();
             }
         });
@@ -217,7 +219,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                         //refresh the note list display here.
                         //mNoteItemList.invalidate();
-                        noteItemsAdapter.notifyDataSetChanged();
+                        if (noteItemsAdapter != null)
+                            noteItemsAdapter.notifyDataSetChanged();
+
                         Snackbar.make(mainActivityLayout, "You've been notified!", Snackbar.LENGTH_LONG).show();
                     }
                 });
