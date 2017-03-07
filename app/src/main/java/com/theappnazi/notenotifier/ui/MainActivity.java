@@ -3,6 +3,8 @@ package com.theappnazi.notenotifier.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,24 +12,21 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewStub;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.theappnazi.notenotifier.R;
 import com.theappnazi.notenotifier.adapters.NoteItemsAdapter;
 import com.theappnazi.notenotifier.models.Note;
+import com.theappnazi.notenotifier.utils.AppConstants;
 import com.theappnazi.notenotifier.utils.MessageUtils;
 import com.theappnazi.notenotifier.utils.NotificationUtils;
+import com.theappnazi.notenotifier.utils.PreferencesUtils;
 import com.theappnazi.notenotifier.views.MyRecyclerView;
 
 import java.util.ArrayList;
@@ -58,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     private NoteItemsAdapter noteItemsAdapter;
 
+    private boolean isSetOnBootEnabled;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setupViews();
+
+        noteList = new ArrayList<>();
+
+        isSetOnBootEnabled = getSetOnBootEnabled();
 
         NotificationUtils.setupNotifications(MainActivity.this);
 
@@ -120,9 +125,43 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_set_on_boot);
+        menuItem.setChecked(getSetOnBootEnabled());
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_clear_all) {
+            //clear all notif
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
+            NotificationUtils.emptyCurrentList(MainActivity.this);
+            return true;
+        } else if (item.getItemId() == R.id.action_set_on_boot) {
+            if (!item.isChecked()) {
+                PreferencesUtils.setBoolean(this, AppConstants.IS_SET_BOOT_ENABLED, true);
+                isSetOnBootEnabled = PreferencesUtils.getBoolean(this, AppConstants.IS_SET_BOOT_ENABLED, true);
+                item.setChecked(true);
+                return true;
+            } else {
+                PreferencesUtils.setBoolean(this, AppConstants.IS_SET_BOOT_ENABLED, false);
+                isSetOnBootEnabled = PreferencesUtils.getBoolean(this, AppConstants.IS_SET_BOOT_ENABLED, false);
+                item.setChecked(false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isSetOnBootEnabled() {
+        return isSetOnBootEnabled;
+    }
+
+    private boolean getSetOnBootEnabled() {
+        return PreferencesUtils.getBoolean(this, AppConstants.IS_SET_BOOT_ENABLED, true);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -158,30 +197,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void showAddNoteDialog() {
         MessageUtils.showAddNoteDialog(MainActivity.this, new MessageUtils.AlertDialogCallback() {
-
             @Override
             public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                 //refresh layout
-
                 //mNoteItemList.invalidate();
-                //noteItemsAdapter.notifyDataSetChanged();
+                noteItemsAdapter.notifyDataSetChanged();
                 Snackbar.make(mainActivityLayout, "Note added!", Snackbar.LENGTH_LONG).show();
             }
         });
@@ -194,9 +216,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onButtonClick(DialogInterface dialogInterface, int id, String clickedButtonType) {
                         //refresh the note list display here.
-
                         //mNoteItemList.invalidate();
-                        //noteItemsAdapter.notifyDataSetChanged();
+                        noteItemsAdapter.notifyDataSetChanged();
                         Snackbar.make(mainActivityLayout, "You've been notified!", Snackbar.LENGTH_LONG).show();
                     }
                 });

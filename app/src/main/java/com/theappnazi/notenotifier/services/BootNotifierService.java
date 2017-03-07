@@ -3,16 +3,13 @@ package com.theappnazi.notenotifier.services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 
-import com.theappnazi.notenotifier.models.Note;
-import com.theappnazi.notenotifier.ui.MainActivity;
+import com.theappnazi.notenotifier.utils.AppConstants;
 import com.theappnazi.notenotifier.utils.NotificationUtils;
+import com.theappnazi.notenotifier.utils.PreferencesUtils;
 
-import java.util.ArrayList;
-
-public class NotifierService extends Service {
-    public NotifierService() {
+public class BootNotifierService extends Service {
+    public BootNotifierService() {
     }
 
     @Override
@@ -24,7 +21,10 @@ public class NotifierService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        NotificationUtils.setupNotifications(NotifierService.this);
+
+        if (PreferencesUtils.getBoolean(this, AppConstants.IS_SET_BOOT_ENABLED, true))
+            NotificationUtils.setupNotifications(BootNotifierService.this);
+
         return START_STICKY;
     }
 

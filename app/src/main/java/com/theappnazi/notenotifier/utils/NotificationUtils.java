@@ -147,6 +147,27 @@ public class NotificationUtils {
 
     }
 
+    public static void emptyCurrentList(Context context) {
+        String json = PreferencesUtils.getString(context, AppConstants.CURRENT_NOTIF_LIST, null);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+        ArrayList<Integer> currentNotifList = null;
+
+        if (json != null && !json.equals("")) {
+            //get arraylist from json
+            currentNotifList = gson.fromJson(json, type);
+        }
+
+        if (currentNotifList != null) {
+            currentNotifList.clear();
+        }
+
+        json = gson.toJson(currentNotifList);
+        PreferencesUtils.setString(context, AppConstants.CURRENT_NOTIF_LIST, json);
+
+    }
+
     public static void setupNotifications(Context context) {
         ArrayList<Integer> currentList = NotificationUtils.getCurrentList(context);
         if (currentList != null) {

@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.theappnazi.notenotifier.ui.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_clear_all"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_clear_all"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_set_on_boot"
+        android:checkable="true"
+        android:title="@string/action_set_on_boot"
         app:showAsAction="never" />
 </menu>

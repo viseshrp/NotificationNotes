@@ -45,7 +45,7 @@
         </receiver>
 
         <service
-            android:name="com.theappnazi.notenotifier.services.NotifierService"
+            android:name="com.theappnazi.notenotifier.services.BootNotifierService"
             android:enabled="true"
             android:exported="true"/>
     </application>
