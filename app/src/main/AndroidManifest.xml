@@ -1,42 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.theappnazi.notenotifier">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
+        android:name=".NoteApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.orm.SugarApp">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
-        <activity android:name=".ui.SplashActivity"
-            android:theme="@style/MyThemeNoBar">
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.theappnazi.notenotifier.ui.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
         <receiver
-            android:name="com.theappnazi.notenotifier.receivers.NotificationCancelReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.theappnazi.notenotifier.intent.NOTE_MARKED_READ" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.theappnazi.notenotifier.receivers.BootReceiver"
+            android:name=".receivers.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -44,10 +33,14 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.theappnazi.notenotifier.services.BootNotifierService"
+        <receiver
+            android:name=".receivers.NotificationReceiver"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.theappnazi.notenotifier.ACTION_DONE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
