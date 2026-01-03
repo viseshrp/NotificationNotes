@@ -49,6 +49,22 @@ else
     exit 1
 fi
 
+# 5. Deployment
+echo ""
+echo ">>> STEP 5: Deployment"
+# Simulating deployment by moving the artifact to a deploy folder.
+# In a real environment, this would use gradle-play-publisher or firebase-app-distribution.
+DEPLOY_DIR="deploy_output"
+mkdir -p $DEPLOY_DIR
+cp app/build/outputs/apk/release/app-release-unsigned.apk $DEPLOY_DIR/app-release.apk
+
+if [ -f "$DEPLOY_DIR/app-release.apk" ]; then
+    echo "✅ Deployment Successful (Artifact staged in $DEPLOY_DIR)"
+else
+    echo "❌ Deployment Failed"
+    exit 1
+fi
+
 echo ""
 echo "=========================================="
 echo "      PIPELINE COMPLETED SUCCESSFULLY     "
