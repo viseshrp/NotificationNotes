@@ -27,14 +27,10 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.theappnazi.notenotifier.data.NoteEntity
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteApp() {
     val viewModel: MainViewModel = hiltViewModel()
     val notes by viewModel.notes.collectAsState()
-    var showAddDialog by remember { mutableStateOf(false) }
-    var noteToEdit by remember { mutableStateOf<NoteEntity?>(null) }
-    var showMenu by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     var hasNotificationPermission by remember {
@@ -65,6 +61,28 @@ fun NoteApp() {
         }
     }
 
+    NoteScreen(
+        notes = notes,
+        onAddNote = { title, content, isPersistent -> viewModel.addNote(title, content, isPersistent) },
+        onUpdateNote = { note -> viewModel.updateNote(note) },
+        onDeleteNote = { note -> viewModel.deleteNote(note) },
+        onClearAll = { viewModel.clearAll() }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NoteScreen(
+    notes: List<NoteEntity>,
+    onAddNote: (String, String, Boolean) -> Unit,
+    onUpdateNote: (NoteEntity) -> Unit,
+    onDeleteNote: (NoteEntity) -> Unit,
+    onClearAll: () -> Unit
+) {
+    var showAddDialog by remember { mutableStateOf(false) }
+    var noteToEdit by remember { mutableStateOf<NoteEntity?>(null) }
+    var showMenu by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -80,7 +98,7 @@ fun NoteApp() {
                         DropdownMenuItem(
                             text = { Text("Clear All") },
                             onClick = {
-                                viewModel.clearAll()
+                                onClearAll()
                                 showMenu = false
                             }
                         )
@@ -113,7 +131,7 @@ fun NoteApp() {
                     NoteItem(
                         note = note,
                         onTap = { noteToEdit = note },
-                        onDelete = { viewModel.deleteNote(note) }
+                        onDelete = { onDeleteNote(note) }
                     )
                 }
             }
@@ -123,7 +141,7 @@ fun NoteApp() {
             AddEditNoteDialog(
                 onDismiss = { showAddDialog = false },
                 onConfirm = { title, content, isPersistent ->
-                    viewModel.addNote(title, content, isPersistent)
+                    onAddNote(title, content, isPersistent)
                     showAddDialog = false
                 }
             )
@@ -134,7 +152,7 @@ fun NoteApp() {
                 note = note,
                 onDismiss = { noteToEdit = null },
                 onConfirm = { title, content, isPersistent ->
-                    viewModel.updateNote(
+                    onUpdateNote(
                         note.copy(
                             title = title,
                             content = content,
@@ -189,6 +207,12 @@ fun NoteItem(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = note.date,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.Gray
+                )
             }
             IconButton(onClick = onDelete) {
                 Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)

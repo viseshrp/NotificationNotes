@@ -12,7 +12,13 @@ buildscript {
         classpath 'com.android.tools.build:gradle:8.1.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        // Detekt plugin
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3"
     }
+}
+
+plugins {
+    id "org.jlleitschuh.gradle.ktlint" version "11.6.1"
 }
 
 allprojects {
@@ -20,6 +26,16 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
+    }
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+}
+
+subprojects {
+    apply plugin: "io.gitlab.arturbosch.detekt"
+
+    detekt {
+        config = files("$rootDir/config/detekt/detekt.yml")
+        buildUponDefaultConfig = true
     }
 }
 
